@@ -1,19 +1,12 @@
 package trabpraticoaprog;
-<<<<<<< HEAD
-import java.util.Scanner;
-public class TrabPraticoAPROG {
-static Scanner sc=new Scanner (System.in);
-    public static void main(String[] args) {
-        
-=======
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class TrabPraticoAPROG {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) throws Exception {
         //declaração de arrays para armazenar informação
         char[] groups = new char[50];
         String[] teams = new String[50];
@@ -23,13 +16,16 @@ public class TrabPraticoAPROG {
         int[] losses = new int[50];
         int[] goalsScored = new int[50];
         int[] goalsLost = new int[50];
-        
+
         //alinea 1  
         readFile(groups, teams, games, wins, ties, losses, goalsScored, goalsLost);
+        //alinea 2
+        int size = readFile(groups, teams, games, wins, ties, losses, goalsScored, goalsLost);
+        fillArray(groups, teams, games, wins, ties, losses, goalsScored, goalsLost, size);
     }
 
     //alinea 1
-    public static void readFile(char[] groups, String[] teams, int[] games, int[] wins, int[] ties, int[] losses, int[] goalsScored, int[] goalsLost) throws FileNotFoundException {
+    public static int readFile(char[] groups, String[] teams, int[] games, int[] wins, int[] ties, int[] losses, int[] goalsScored, int[] goalsLost) throws Exception {
         Scanner fileScan = new Scanner(new File("../PracticalWork.csv"));
         fileScan.nextLine(); //descarta linha do cabeçalho
         int numLines = 0; //conta as linhas do documento
@@ -46,6 +42,30 @@ public class TrabPraticoAPROG {
             numLines++;
         }
         fileScan.close();
->>>>>>> 46cff41d29e62e438c0a34c0b01c7a5bd3e7735c
+        //retorna para entrar como comprimento do array
+        return numLines;
+    }
+
+    public static void fillArray(char[] groups, String[] teams, int[] games, int[] wins, int[] ties, int[] losses, int[] goalsScored, int[] goalsLost, int size) throws Exception{
+        //System.out.println("Introduza equipa");
+        String teamName = sc.nextLine();
+        teams[0] = teamName;
+        for (int i = 1; i < size; i++) {
+            groups[i] = (char)System.in.read();
+            //System.out.println("Introduza equipa");
+            teams[i] = sc.nextLine();
+            //garantir que não existem equipas com nomes iguais
+            if (teams[i].equals(teams[i-1])) {
+            //System.out.println("Nome já usado. Introduza outro nome");
+                teams[i] = sc.nextLine();
+            }
+            games[i] = sc.nextInt();
+            wins[i] = sc.nextInt();
+            ties[i] = sc.nextInt();
+            losses[i] = sc.nextInt();
+            goalsScored[i] = sc.nextInt();
+            goalsLost[i] = sc.nextInt();
+            sc.nextLine();
+        }
     }
 }
