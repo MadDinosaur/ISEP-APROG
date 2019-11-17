@@ -1,13 +1,9 @@
 package trabpraticoaprog;
-
-
+import java.util.Scanner;
 public class TrabPraticoAPROG {
-
-    /**
-     * @param args the command line arguments
-     */
+static Scanner sc=new Scanner (System.in);
     public static void main(String[] args) {
-        // TODO code application logic here
+        
     }
     
 }
