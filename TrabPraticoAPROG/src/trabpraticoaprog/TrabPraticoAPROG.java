@@ -1,6 +1,8 @@
 package trabpraticoaprog;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class TrabPraticoAPROG {
@@ -24,12 +26,15 @@ public class TrabPraticoAPROG {
 
         //alinea 2
         fillArray(groups, teams, games, wins, ties, losses, goalsScored, goalsLost, size);
-        
+
         //alinea 3
         getTeamScores(teams, wins, ties, teamScores);
-        
+
         //alinea 7
         listGoalsLost(teams, goalsLost, size);
+        
+        //alinea 11
+        generateStatistics(games, wins, ties, losses, goalsScored, goalsLost, size);
     }
 
     public static int menu() {
@@ -123,4 +128,27 @@ public class TrabPraticoAPROG {
         }
     }
 
+    //alinea 11
+    public static void generateStatistics(int[] games, int[] wins, int[] ties, int[] losses, int[] goalsScored, int[] goalsLost, int size) throws FileNotFoundException {
+        int gameSum = 0, winSum = 0, tieSum = 0, lossSum = 0, goalsScoredSum = 0, goalsLostSum = 0;
+        for (int i = 0; i < size; i++) {
+           gameSum += games[i];
+           winSum += wins[i];
+           tieSum += ties[i];
+           lossSum += losses[i];
+           goalsScoredSum += goalsScored[i];
+           goalsLostSum += goalsLost[i];
+        }
+        File statFile = new File("../Statistics.txt");
+        PrintWriter printWriter = new PrintWriter(statFile);
+        printWriter.printf("Total de jogos=%d%n",gameSum);
+        printWriter.printf("Total de vitórias=%d%n",winSum);
+        printWriter.printf("Total de empates=%d%n",tieSum);
+        printWriter.printf("Total de derrotas=%d%n",lossSum);
+        printWriter.printf("Total de golos marcados=%d%n",goalsScoredSum);
+        printWriter.printf("Total de golos sofridos=%d%n",goalsLostSum);
+        printWriter.printf("Média de golos marcados por jogo=%.1f%n",(double)goalsScoredSum/gameSum);
+        printWriter.printf("Média de golos sofridos por jogo=%.1f%n",(double)goalsLostSum/gameSum);   
+        printWriter.close();
+    }
 }
