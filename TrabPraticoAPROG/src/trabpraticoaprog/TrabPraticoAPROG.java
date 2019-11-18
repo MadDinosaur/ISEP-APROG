@@ -28,13 +28,16 @@ public class TrabPraticoAPROG {
         int size = readFile(groups, teams, games);
 
         //alinea 2
-       // fillArray(groups, teams, games, size);
+        fillArray(groups, teams, games, size);
 
-        //alinea 3
-        //getTeamScores(teams, games, teamScores, size);
+        //aliena 3 e 4
+        order(getTeamScores(teams, games, teamScores, size), groups,size,teams,games);
 
         //alinea 7
         listGoalsLost(teams, games, size);
+        
+        //alinea 8
+        moreGoalsLost(teams, games,size);
         
         //alinea 11
         //generateStatistics(games, size);
@@ -68,7 +71,7 @@ public class TrabPraticoAPROG {
         fileScan.nextLine(); //descarta linha do cabeçalho
         int numLines = 0; //conta as linhas do documento
         while (fileScan.hasNextLine()) {
-            String[] line = fileScan.nextLine().split(",");
+            String[] line = fileScan.nextLine().split(","); //cortar pelas vírgulas
             groups[numLines] = line[0].charAt(0);
             teams[numLines] = line[1];
             for(int i = 0; i<games.length; i++){
@@ -83,7 +86,7 @@ public class TrabPraticoAPROG {
 
     //alinea 2
     public static void fillArray(char[] groups, String[] teams, int[][] games, int size) throws Exception {
-        System.out.println("Introduza equipa");
+        //System.out.println("Introduza equipa");
         String teamName = sc.nextLine();
         teams[0] = teamName;
         for (int i = 1; i < size; i++) {
@@ -103,12 +106,21 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 3
-    public static void getTeamScores(String[] teams, int[][] games, int[] teamScores, int size) {
+    public static int [] getTeamScores(String[] teams, int[][] games, int[] teamScores, int size) {
         for (int i = 0; i < size; i++) {
             teamScores[i] = games[1][i] * 3 + games[2][i];
         }
+        return teamScores;
     }
 
+    //alinea 4
+    public static void order (int []TeamScores, char []groups, int size, String[]teams, int []games){
+                for (int i = 0; i < size; i++) {
+                    for (int j=0;j<groups.length();j++)
+                    groups[i];
+                }
+
+    }
     //alinea 7
     public static void listGoalsLost(String[] teams, int[][] games, int size) {
         System.out.println("Insira o nº de golos sofridos.");
@@ -123,6 +135,51 @@ public class TrabPraticoAPROG {
         if (numGoalsExists == false) {
             System.out.println("Nenhuma equipa sofreu " + numGoals + " golos.");
         }
+    }
+    
+    //alinea 8
+    public static void moreGoalsLost (String[]teams, int [][]games, int size){
+    String []teamGoalsLost=new String[size];
+    String aux="";
+    int qtt=0;
+    for (int i=0; i<size; i++){
+    for (int j=0; j<size;j++){
+    //verificar se equipa tem + golos sofridos e preencher array de equipas com +golos sofridos
+          if (games[5][i]>games[4][i]){
+              teamGoalsLost[j]=teams[i];
+              qtt+=1;
+          }
+      }  
+    }
+    if(qtt!=0){ //se qtt!=0, então equipa tem + golos sofridos
+    for(int a=0; a<teamGoalsLost.length-1;a++){
+        for(int b=a+1; b<teamGoalsLost.length;b++){
+            String team1=teamGoalsLost[a];
+            String team2=teamGoalsLost[b];
+            //comparar 1 letra
+            if (team2.charAt(0)>team1.charAt(0)){
+                aux=team1;
+                teamGoalsLost[a]=team2;
+                teamGoalsLost[b]=aux;
+            }else{
+                //caso de a 1 letra ser igual
+                if (team2.charAt(0)== team1.charAt(0)){
+                    if(team2.charAt(1)>team1.charAt(1)){
+                        aux=team1;
+                        teamGoalsLost[a]=team2;
+                        teamGoalsLost[b]=team1;
+                    }
+                }
+            } 
+        }
+    }
+    for(int k=0; k<teamGoalsLost.length;k++){
+        System.out.println("Equipas com mais golos sofridos do que golos marcados:"+"/n"+teamGoalsLost[k]);
+    } 
+    }else{
+        System.out.println("Não há equipas com mais golos sofridos do que golos marcados.");
+    }
+    
     }
 
     //alinea 11
