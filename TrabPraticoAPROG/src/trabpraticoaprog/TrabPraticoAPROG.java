@@ -1,5 +1,6 @@
 package trabpraticoaprog;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class TrabPraticoAPROG {
@@ -16,12 +17,41 @@ public class TrabPraticoAPROG {
         int[] losses = new int[50];
         int[] goalsScored = new int[50];
         int[] goalsLost = new int[50];
+        int[] teamScores = new int[50];
 
         //alinea 1  
-        readFile(groups, teams, games, wins, ties, losses, goalsScored, goalsLost);
-        //alinea 2
         int size = readFile(groups, teams, games, wins, ties, losses, goalsScored, goalsLost);
+
+        //alinea 2
         fillArray(groups, teams, games, wins, ties, losses, goalsScored, goalsLost, size);
+        
+        //alinea 3
+        getTeamScores(teams, wins, ties, teamScores);
+        
+        //alinea 7
+        listGoalsLost(teams, goalsLost, size);
+    }
+
+    public static int menu() {
+        System.out.printf("%nMenu:%n"
+                + "1. Adicionar informação de nova equipa.%n" //alinea2
+                + "2. Ver classificação das equipas por grupo.%n" //alinea5
+                + "3. Ver equipas com mais golos marcados.%n" //alinea6
+                + "4. Ver equipas com um dado número de golos sofridos.%n" //alinea7
+                + "5. Ver equipas com mais golos sofridos que marcados.%n" //alinea8
+                + "6. Ver primeiros classificados por grupo.%n" //alinea9
+                + "7. Ver informação de uma dada equipa.%n" //alinea10
+                + "8. Gerar estatísticas.%n" //alinea11
+                + "9. Remover 3º e 4º classificados dos grupos.%n" //alinea12
+                + "10. Gerar informações da fase seguinte do campeonato.%n" //alinea13
+                + "11. Gerar jogos da fase final.%n" //alinea14
+                + "12. Sair%n%n"
+                + "Que opção pretende?");
+        int option = sc.nextInt();
+        return option;
+        /* Método ainda não implementado.
+        Quando todas as alíneas estiverem feitas irá inserir-se um switch case na main para executar o menu.
+         */
     }
 
     //alinea 1
@@ -46,17 +76,18 @@ public class TrabPraticoAPROG {
         return numLines;
     }
 
-    public static void fillArray(char[] groups, String[] teams, int[] games, int[] wins, int[] ties, int[] losses, int[] goalsScored, int[] goalsLost, int size) throws Exception{
-        //System.out.println("Introduza equipa");
+    //alinea 2
+    public static void fillArray(char[] groups, String[] teams, int[] games, int[] wins, int[] ties, int[] losses, int[] goalsScored, int[] goalsLost, int size) throws Exception {
+        System.out.println("Introduza equipa");
         String teamName = sc.nextLine();
         teams[0] = teamName;
         for (int i = 1; i < size; i++) {
-            groups[i] = (char)System.in.read();
+            groups[i] = (char) System.in.read();
             //System.out.println("Introduza equipa");
             teams[i] = sc.nextLine();
             //garantir que não existem equipas com nomes iguais
-            if (teams[i].equals(teams[i-1])) {
-            //System.out.println("Nome já usado. Introduza outro nome");
+            if (teams[i].equals(teams[i - 1])) {
+                //System.out.println("Nome já usado. Introduza outro nome");
                 teams[i] = sc.nextLine();
             }
             games[i] = sc.nextInt();
@@ -68,4 +99,28 @@ public class TrabPraticoAPROG {
             sc.nextLine();
         }
     }
+
+    //alinea 3
+    public static void getTeamScores(String[] teams, int[] wins, int[] ties, int[] teamScores) {
+        for (int i = 0; i < teams.length; i++) {
+            teamScores[i] = wins[i] * 3 + ties[i];
+        }
+    }
+
+    //alinea 7
+    public static void listGoalsLost(String[] teams, int[] goalsLost, int size) {
+        System.out.println("Insira o nº de golos sofridos.");
+        int numGoals = sc.nextInt();
+        boolean numGoalsExists = false;
+        for (int i = 0; i < size; i++) {
+            if (goalsLost[i] == numGoals) {
+                System.out.println(teams[i]);
+                numGoalsExists = true;
+            }
+        }
+        if (numGoalsExists == false) {
+            System.out.println("Nenhuma equipa sofreu " + numGoals + " golos.");
+        }
+    }
+
 }
