@@ -32,7 +32,10 @@ public class TrabPraticoAPROG {
 
         //aliena 3 e 4
         order(getTeamScores(teams, games, teamScores, size), groups,size,teams,games);
-
+        
+        //alinea 6
+        maxGoals(teams,games,size);
+        
         //alinea 7
         listGoalsLost(teams, games, size);
         
@@ -121,6 +124,24 @@ public class TrabPraticoAPROG {
                 }
 
     }
+    
+    //alinea 6
+    public static void maxGoals(String[][]team, int [][]games, int size){
+        int numberMaxGoals=games[4][0];
+        //ciclo for para determinar qual é o maior nº de golos marcados por uma equipa
+        for (int i=1; i<size;i++){
+            if (games[4][i]>numberMaxGoals){
+                numberMaxGoals=games[4][i];
+            }
+        }
+        //percorrer array para listar equipas cujo nº de golos = nº max
+        for (int j=0;j<size;j++){
+            if (games[4][j]==numberMaxGoals){
+                System.out.println(team[j]);
+            }
+        }
+    }
+      
     //alinea 7
     public static void listGoalsLost(String[] teams, int[][] games, int size) {
         System.out.println("Insira o nº de golos sofridos.");
