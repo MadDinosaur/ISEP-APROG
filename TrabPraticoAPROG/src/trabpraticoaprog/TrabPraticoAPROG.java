@@ -2,6 +2,7 @@ package trabpraticoaprog;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -9,7 +10,7 @@ public class TrabPraticoAPROG {
 
     static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         //declaração de arrays para armazenar informação
         char[] groups = new char[50];
         String[] teams = new String[50];
@@ -42,8 +43,14 @@ public class TrabPraticoAPROG {
         //alinea 8
         moreGoalsLost(teams, games,size);
         
+        //alinea10
+        listInfo(teams, groups, games, size);
+        
         //alinea 11
         //generateStatistics(games, size);
+        
+        //alinea 12
+        deleteTeams(teams, groups, games);
     }
 
     public static int menu() {
@@ -69,7 +76,7 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 1
-    public static int readFile(char[] groups, String[] teams, int[][] games) throws Exception {
+    public static int readFile(char[] groups, String[] teams, int[][] games) throws FileNotFoundException {
         Scanner fileScan = new Scanner(new File("../PracticalWork.csv"));
         fileScan.nextLine(); //descarta linha do cabeçalho
         int numLines = 0; //conta as linhas do documento
@@ -88,7 +95,8 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 2
-    public static void fillArray(char[] groups, String[] teams, int[][] games, int size) throws Exception {
+    //ainda tenho de rever este
+    public static void fillArray(char[] groups, String[] teams, int[][] games, int size) throws FileNotFoundException, IOException {
         //System.out.println("Introduza equipa");
         String teamName = sc.nextLine();
         teams[0] = teamName;
@@ -109,7 +117,7 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 3
-    public static int [] getTeamScores(String[] teams, int[][] games, int[] teamScores, int size) {
+    public static int [] getTeamScores(String[] teams, int[][] games, int[] teamScores, int size) throws FileNotFoundException{
         for (int i = 0; i < size; i++) {
             teamScores[i] = games[1][i] * 3 + games[2][i];
         }
@@ -117,16 +125,17 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 4
-    public static void order (int []TeamScores, char []groups, int size, String[]teams, int []games){
-                for (int i = 0; i < size; i++) {
-                    for (int j=0;j<groups.length();j++)
-                    groups[i];
+    public static void order (int []TeamScores, char []groups, int size, String[]teams, int []games) throws FileNotFoundException{
+                
+                    
                 }
 
-    }
+    
+    
+    //alinea 5
     
     //alinea 6
-    public static void maxGoals(String[][]team, int [][]games, int size){
+    public static void maxGoals(String[]team, int [][]games, int size)throws FileNotFoundException{
         int numberMaxGoals=games[4][0];
         //ciclo for para determinar qual é o maior nº de golos marcados por uma equipa
         for (int i=1; i<size;i++){
@@ -143,7 +152,7 @@ public class TrabPraticoAPROG {
     }
       
     //alinea 7
-    public static void listGoalsLost(String[] teams, int[][] games, int size) {
+    public static void listGoalsLost(String[] teams, int[][] games, int size) throws FileNotFoundException{
         System.out.println("Insira o nº de golos sofridos.");
         int numGoals = sc.nextInt();
         boolean numGoalsExists = false;
@@ -159,19 +168,12 @@ public class TrabPraticoAPROG {
     }
     
     //alinea 8
-    public static void moreGoalsLost (String[]teams, int [][]games, int size){
+    //compor 8, definir métodos
+    public static void moreGoalsLost (String[]teams, int [][]games, int size)throws FileNotFoundException{
     String []teamGoalsLost=new String[size];
     String aux="";
     int qtt=0;
-    for (int i=0; i<size; i++){
-    for (int j=0; j<size;j++){
-    //verificar se equipa tem + golos sofridos e preencher array de equipas com +golos sofridos
-          if (games[5][i]>games[4][i]){
-              teamGoalsLost[j]=teams[i];
-              qtt+=1;
-          }
-      }  
-    }
+    if(moreScored(games, size, teams)=true){  
     if(qtt!=0){ //se qtt!=0, então equipa tem + golos sofridos
     for(int a=0; a<teamGoalsLost.length-1;a++){
         for(int b=a+1; b<teamGoalsLost.length;b++){
@@ -194,15 +196,37 @@ public class TrabPraticoAPROG {
             } 
         }
     }
+    }
     for(int k=0; k<teamGoalsLost.length;k++){
         System.out.println("Equipas com mais golos sofridos do que golos marcados:"+"/n"+teamGoalsLost[k]);
     } 
     }else{
         System.out.println("Não há equipas com mais golos sofridos do que golos marcados.");
     }
-    
     }
-
+    
+    public static boolean moreScored (int [][]games, int size, String[]teams){
+        boolean moreScored=false;
+        String []teamGoalsLost=new String[size];
+        for (int i=0; i<size; i++){
+    //verificar se equipa tem + golos sofridos e preencher array de equipas com +golos sofridos
+        if (games[5][i]>games[4][i]){
+        for (int j=0; j<size;j++){
+              teamGoalsLost[j]=teams[i];
+              moreScored=true;
+          }
+      } 
+    }
+        return moreScored;
+    }
+    
+    //alinea 10
+    public static void listInfo(String[]teams, int [][]games, char []groups, int size){
+        for(int i=0;i<size;i++){
+            
+        }
+        
+    }
     //alinea 11
     public static void generateStatistics(int[][] games, int size) throws FileNotFoundException {
         int gameSum = 0, winSum = 0, tieSum = 0, lossSum = 0, goalsScoredSum = 0, goalsLostSum = 0;
@@ -226,4 +250,7 @@ public class TrabPraticoAPROG {
         printWriter.printf("Média de golos sofridos por jogo=%.1f%n",(double)goalsLostSum/gameSum);   
         printWriter.close();
     }
+    
+    //alinea 12
+    public static void deleteTeams (String[]teams, char []groups, int [][])
 }
