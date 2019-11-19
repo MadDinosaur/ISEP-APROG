@@ -28,29 +28,59 @@ public class TrabPraticoAPROG {
         //alinea 1  
         int size = readFile(groups, teams, games);
 
-        //alinea 2
-        fillArray(groups, teams, games, size);
+        switch (menu()) {
+            case 1:
+                //alinea 2
+                fillArray(groups, teams, games, size);
+                break;
+            case 2:
+                //alinea 5
+                System.out.println("Não implementado");
+                break;
+            case 3:
+                //alinea 6
+                maxGoals(teams, games, size);
+                break;
+            case 4:
+                //alinea 7
+                listGoalsLost(teams, games, size);
+                break;
+            case 5:
+                //alinea 8
+                moreGoalsLost(teams, games, size);
+                break;
+            case 6:
+                //alinea 9
+                System.out.println("Nao implementado");
+                break;
+            case 7:
+                //alinea10
+                listInfo(teams, games, groups, size);
+                break;
+            case 8:
+                //alinea 11
+                generateStatistics(games, size);
+                break;
+            case 9:
+                //alinea 12
+                deleteTeams(teams, groups, games);
+                break;
+            case 10:
+                //alinea 13
+                System.out.println("Nao implementado");
+                break;
+            case 11:
+                //alinea 14
+                System.out.println("Nao implementado");
+                break;
+            case 12:
+                break;
+            default:
+                System.out.println("Opção inválida");
+        }
 
         //aliena 3 e 4
-        order(getTeamScores(teams, games, teamScores, size), groups, size, teams, games);
-
-        //alinea 6
-        maxGoals(teams, games, size);
-
-        //alinea 7
-        listGoalsLost(teams, games, size);
-
-        //alinea 8
-        moreGoalsLost(teams, games, size);
-
-        //alinea10
-        listInfo(teams, games, groups, size);
-
-        //alinea 11
-        generateStatistics(games, size);
-
-        //alinea 12
-        deleteTeams(teams, groups, games);
+        //order(getTeamScores(teams, games, teamScores, size), groups, size, teams, games);
     }
 
     public static int menu() {
@@ -70,9 +100,13 @@ public class TrabPraticoAPROG {
                 + "Que opção pretende?");
         int option = sc.nextInt();
         return option;
-        /* Método ainda não implementado.
-        Quando todas as alíneas estiverem feitas irá inserir-se um switch case na main para executar o menu.
-         */
+    }
+
+    public static void printHeader(File file) throws FileNotFoundException {
+        PrintWriter printWriter = new PrintWriter(file);
+        printWriter.printf("| Grp | Pos | Equipa          | Pts| J  | V  | E  | D  | GM | GS | GD |%n");
+        printWriter.printf("|=====|=====|=================|====|====|====|====|====|====|====|====|%n");
+        printWriter.close();
     }
 
     //alinea 1
@@ -130,6 +164,7 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 5
+    
     //alinea 6
     public static void maxGoals(String[] team, int[][] games, int size) throws FileNotFoundException {
         int numberMaxGoals = games[4][0];
