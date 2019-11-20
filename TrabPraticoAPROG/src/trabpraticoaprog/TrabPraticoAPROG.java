@@ -28,14 +28,14 @@ public class TrabPraticoAPROG {
         //alinea 1  
         int size = readFile(groups, teams, games);
 
-        switch (menu()) {
+        /*  switch (menu()) {
             case 1:
                 //alinea 2
                 fillArray(groups, teams, games, size);
                 break;
             case 2:
                 //alinea 5
-                System.out.println("Não implementado");
+                listPosition();
                 break;
             case 3:
                 //alinea 6
@@ -51,7 +51,7 @@ public class TrabPraticoAPROG {
                 break;
             case 6:
                 //alinea 9
-                System.out.println("Nao implementado");
+                firstPositions();
                 break;
             case 7:
                 //alinea10
@@ -77,10 +77,9 @@ public class TrabPraticoAPROG {
                 break;
             default:
                 System.out.println("Opção inválida");
-        }
-
+        }*/
         //aliena 3 e 4
-        //order(getTeamScores(teams, games, teamScores, size), groups, size, teams, games);
+        order(getteamScores(teams, games, teamScores, size), groups, size, teams, games);
     }
 
     public static int menu() {
@@ -102,11 +101,13 @@ public class TrabPraticoAPROG {
         return option;
     }
 
-    public static void printHeader(File file) throws FileNotFoundException {
-        PrintWriter printWriter = new PrintWriter(file);
-        printWriter.printf("| Grp | Pos | Equipa          | Pts| J  | V  | E  | D  | GM | GS | GD |%n");
-        printWriter.printf("|=====|=====|=================|====|====|====|====|====|====|====|====|%n");
-        printWriter.close();
+    public static void printHeader() {
+        System.out.printf("| Grp | Pos | Equipa          | Pts| J  | V  | E  | D  | GM | GS | GD |%n");
+        System.out.printf("|=====|=====|=================|====|====|====|====|====|====|====|====|%n");
+    }
+
+    public static void printRow(char grp, int pos, String equipa, int pts, int j, int v, int e, int d, int gm, int gs, int gd) {
+        System.out.printf("|%-5s|%5d|%-17s|%4d|%4d|%4d|%4d|%4d|%4d|%4d|%4d|", grp, pos, equipa, pts, j, v, e, d, gm, gs, gd);
     }
 
     //alinea 1
@@ -151,7 +152,7 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 3
-    public static int[] getTeamScores(String[] teams, int[][] games, int[] teamScores, int size) throws FileNotFoundException {
+    public static int[] getteamScores(String[] teams, int[][] games, int[] teamScores, int size) throws FileNotFoundException {
         for (int i = 0; i < size; i++) {
             teamScores[i] = games[1][i] * 3 + games[2][i];
         }
@@ -159,7 +160,7 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 4
-    public static void order(int[] TeamScores, char[] groups, int size, String[] teams, int[][] games) throws FileNotFoundException {
+    public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games) throws FileNotFoundException {
         //percorrer grupos e ordená-los
         char reference = groups[0], aux, group1, group2;
         //esta parte ainda estou a tentar descobrir como fazer
@@ -178,27 +179,27 @@ public class TrabPraticoAPROG {
         for (int idx1 = 0; idx1 < size - 1; idx1++) {
             for (int idx2 = idx1 + 1; idx2 < size; idx2++) {
                 //verificar pontuação
-                if (TeamScores[idx2] > TeamScores[idx1]) {
-                    exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                if (teamScores[idx2] > teamScores[idx1]) {
+                    exchangeInfo(teamScores, teams, games, idx1, idx2);
                 } else {
                     //verificar maior nº golos marcados
-                    if (TeamScores[idx2] == TeamScores[idx1]) {
+                    if (teamScores[idx2] == teamScores[idx1]) {
                         if (games[4][idx2] > games[4][idx1]) {
-                            exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                            exchangeInfo(teamScores, teams, games, idx1, idx2);
                         } else {
                             if (games[4][idx2] == games[4][idx1]) {
                                 if (games[5][idx2] < games[5][idx1]) {
-                                    exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                                    exchangeInfo(teamScores, teams, games, idx1, idx2);
                                 } else {
                                     if (games[4][idx2] == games[4][idx1]) {
                                         //comparar 1 letra
                                         if (teams[idx2].charAt(0) < teams[idx2].charAt(0)) {
-                                            exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                                            exchangeInfo(teamScores, teams, games, idx1, idx2);
                                         } else {
                                             //caso de a 1 letra ser igual
                                             if (teams[idx2].charAt(0) == teams[idx1].charAt(0)) {
                                                 if (teams[idx2].charAt(1) > teams[idx1].charAt(1)) {
-                                                    exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                                                    exchangeInfo(teamScores, teams, games, idx1, idx2);
                                                 }
                                             }
                                         }
@@ -213,11 +214,11 @@ public class TrabPraticoAPROG {
     }
 
     //método para trocar as linhas completas
-    public static void exchangeInfo(int[] TeamScores, String[] teams, int[][] games, int idx1, int idx2) {
+    public static void exchangeInfo(int[] teamScores, String[] teams, int[][] games, int idx1, int idx2) {
         //trocar pontuações
-        int auxScore = TeamScores[idx1];
-        TeamScores[idx1] = TeamScores[idx2];
-        TeamScores[idx2] = auxScore;
+        int auxScore = teamScores[idx1];
+        teamScores[idx1] = teamScores[idx2];
+        teamScores[idx2] = auxScore;
         //trocar equipas
         String auxTeams = teams[idx1];
         teams[idx1] = teams[idx2];
@@ -228,8 +229,11 @@ public class TrabPraticoAPROG {
         games[idx2] = auxGames;
     }
 
-    //alinea 5
-    
+    //alinea 5 - em desenvolvimento
+    public static void listPosition() {
+        printHeader();
+    }
+
     //alinea 6
     public static void maxGoals(String[] team, int[][] games, int size) throws FileNotFoundException {
         int numberMaxGoals = games[4][0];
@@ -316,6 +320,12 @@ public class TrabPraticoAPROG {
         return moreScored;
     }
 
+    //alinea 9 - em desenvolvimento
+    public static void firstPositions() {
+        printHeader();
+
+    }
+
     //alinea 10
     public static void listInfo(String[] teams, int[][] games, char[] groups, int size) {
         for (int i = 0; i < size; i++) {
@@ -351,5 +361,12 @@ public class TrabPraticoAPROG {
     //alinea 12
     public static void deleteTeams(String[] teams, char[] groups, int[][] games) {
 
+    }
+
+    //alinea 13 - em desenvolvimento
+    public static void generateFinalStage(char[] groups, int[] positions, String[] teams, int[] teamScores) throws FileNotFoundException {
+        File finalStageFile = new File("../FinalStage.csv");
+        PrintWriter printWriter = new PrintWriter(finalStageFile);
+        printWriter.printf("%s,%d,%s,%d", groups, positions, teams, teamScores); //inserir num 'for looop' i=nº equipas na fase seguinte
     }
 }
