@@ -126,7 +126,72 @@ public class TrabPraticoAPROG {
 
     //alinea 4
     public static void order(int[] TeamScores, char[] groups, int size, String[] teams, int[][] games) throws FileNotFoundException {
+        //percorrer grupos e ordená-los
+        char reference = groups[0], aux, group1, group2;
+        //esta parte ainda estou a tentar descobrir como fazer
+        for (int i = 1; i < size; i++) {
+            if (groups[i] < reference) {
+                aux = reference;
+                group1 = groups[i];
+                group2 = reference;
+            } else {
+                if (groups[i] == reference) {
 
+                }
+            }
+        }
+        //ordenar dentro de cada grupo
+        for (int idx1 = 0; idx1 < size - 1; idx1++) {
+            for (int idx2 = idx1 + 1; idx2 < size; idx2++) {
+                //verificar pontuação
+                if (TeamScores[idx2] > TeamScores[idx1]) {
+                    exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                } else {
+                    //verificar maior nº golos marcados
+                    if (TeamScores[idx2] == TeamScores[idx1]) {
+                        if (games[4][idx2] > games[4][idx1]) {
+                            exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                        } else {
+                            if (games[4][idx2] == games[4][idx1]) {
+                                if (games[5][idx2] < games[5][idx1]) {
+                                    exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                                } else {
+                                    if (games[4][idx2] == games[4][idx1]) {
+                                        //comparar 1 letra
+                                        if (teams[idx2].charAt(0) < teams[idx2].charAt(0)) {
+                                            exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                                        } else {
+                                            //caso de a 1 letra ser igual
+                                            if (teams[idx2].charAt(0) == teams[idx1].charAt(0)) {
+                                                if (teams[idx2].charAt(1) > teams[idx1].charAt(1)) {
+                                                    exchangeInfo(TeamScores, teams, games, idx1, idx2);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //método para trocar as linhas completas
+    public static void exchangeInfo(int[] TeamScores, String[] teams, int[][] games, int idx1, int idx2) {
+        //trocar pontuações
+        int auxScore = TeamScores[idx1];
+        TeamScores[idx1] = TeamScores[idx2];
+        TeamScores[idx2] = auxScore;
+        //trocar equipas
+        String auxTeams = teams[idx1];
+        teams[idx1] = teams[idx2];
+        teams[idx2] = auxTeams;
+        //trocar resto das informações
+        int[] auxGames = games[idx1];
+        games[idx1] = games[idx2];
+        games[idx2] = auxGames;
     }
 
     //alinea 5
