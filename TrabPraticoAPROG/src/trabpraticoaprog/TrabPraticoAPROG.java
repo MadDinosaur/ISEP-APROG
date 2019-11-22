@@ -32,12 +32,7 @@ public class TrabPraticoAPROG {
 
         //alinea 1  
         int size = readFile(groups, teams, games);
-<<<<<<< HEAD
-        //adicionar novo size
-        
-=======
 
->>>>>>> 49b1c2d1101eee56c34bc39b21d439048202af6f
         switch (menu()) {
             case 1:
                 //alinea 2
@@ -87,11 +82,8 @@ public class TrabPraticoAPROG {
                 break;
             default:
                 System.out.println("Opção inválida");
-<<<<<<< HEAD
-        } 
-=======
         }
->>>>>>> 49b1c2d1101eee56c34bc39b21d439048202af6f
+
         //aliena 3 e 4
         //order(getteamScores(teams, games, teamScores, size), groups, size, teams, games);
     }
@@ -144,23 +136,6 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 2
-<<<<<<< HEAD
-    public static void fillArray(char[] groups, String[] teams, int[][] games, int size) throws FileNotFoundException, IOException {
-        //System.out.println("Introduza equipa");
-        String teamName = sc.nextLine();
-        teams[0] = teamName;
-        for (int i = 1; i < size; i++) {
-            groups[i] = (char) System.in.read();
-            //System.out.println("Introduza equipa");
-            teams[i] = sc.nextLine();
-            //garantir que não existem equipas com nomes iguais
-            if (teams[i].equals(teams[i - 1])) {
-                //System.out.println("Nome já usado. Introduza outro nome");
-                teams[i] = sc.nextLine();
-            }
-            for (int k = 0; k < games.length; k++) {
-                games[i][k] = sc.nextInt();
-=======
     public static int fillArray(char[] groups, String[] teams, int[][] games, int size) throws FileNotFoundException, IOException {
         System.out.printf("Por favor introduza a informação no formato%nGrupo,Equipa,Jogos,Vitorias,Empates,Derrotas,GolosMarcados,GolosSofridos%n");
         sc.nextLine();
@@ -175,8 +150,8 @@ public class TrabPraticoAPROG {
                     validTeam = false;
                     line = sc.nextLine().split(",");
                 }
->>>>>>> 49b1c2d1101eee56c34bc39b21d439048202af6f
             }
+            sc.nextLine();
         } while (validTeam == false);
 
         groups[size] = line[0].trim().charAt(0);
@@ -215,7 +190,7 @@ public class TrabPraticoAPROG {
             }
         }
         System.out.println(Arrays.toString(groups));
-                sameGroup(groups, size, teamScores, teams, games);
+        sameGroup(groups, size, teamScores, teams, games);
 
     }
 
@@ -431,7 +406,7 @@ public class TrabPraticoAPROG {
 
     //alinea 12
     public static void deleteTeams(String[] teams, char[] groups, int[][] games) {
-        
+
     }
 
     //alinea 13 - em desenvolvimento
@@ -442,4 +417,4 @@ public class TrabPraticoAPROG {
     }
 }
 
-/* rever 4
+// rever 4
