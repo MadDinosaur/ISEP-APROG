@@ -145,19 +145,20 @@ public class TrabPraticoAPROG {
         boolean validTeam = true;
         do {
             for (int i = 0; i < size; i++) {
+                validTeam = true;
                 if (teams[i].equalsIgnoreCase(line[1].trim())) {
                     System.out.println("Equipa já existente. Insira novamente a informação.");
                     validTeam = false;
                     line = sc.nextLine().split(",");
+                    sc.nextLine();
                 }
             }
-            sc.nextLine();
         } while (validTeam == false);
 
         groups[size] = line[0].trim().charAt(0);
         teams[size] = line[1].trim();
         for (int i = 0; i < games[0].length; i++) {
-            games[size][i] = Integer.parseInt(line[i + 2]);
+            games[size][i] = Integer.parseInt(line[i + 2].trim());
         }
         return (++size);
     }
@@ -320,38 +321,6 @@ public class TrabPraticoAPROG {
                 System.out.println(sortedTeams[i]);
             }
         }
-        /*String aux = "";
-        int qtt = 0;
-        if (moreScored(games, size, teams) == true) {
-            if (qtt != 0) { //se qtt!=0, então equipa tem + golos sofridos
-                for (int a = 0; a < teamGoalsLost.length - 1; a++) {
-                    for (int b = a + 1; b < teamGoalsLost.length; b++) {
-                        String team1 = teamGoalsLost[a];
-                        String team2 = teamGoalsLost[b];
-                        //comparar 1 letra
-                        if (team2.charAt(0) > team1.charAt(0)) {
-                            aux = team1;
-                            teamGoalsLost[a] = team2;
-                            teamGoalsLost[b] = aux;
-                        } else {
-                            //caso de a 1 letra ser igual
-                            if (team2.charAt(0) == team1.charAt(0)) {
-                                if (team2.charAt(1) > team1.charAt(1)) {
-                                    aux = team1;
-                                    teamGoalsLost[a] = team2;
-                                    teamGoalsLost[b] = team1;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            for (int k = 0; k < teamGoalsLost.length; k++) {
-                System.out.println("Equipas com mais golos sofridos do que golos marcados:" + "/n" + teamGoalsLost[k]);
-            }
-        } else {
-            System.out.println("Não há equipas com mais golos sofridos do que golos marcados.");
-        }*/
     }
 
     public static int moreScored(int[][] games, int size, String[] teams, String[] teamsGoalsLost) {
