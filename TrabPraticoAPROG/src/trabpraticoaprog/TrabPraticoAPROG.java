@@ -32,8 +32,9 @@ public class TrabPraticoAPROG {
 
         //alinea 1  
         int size = readFile(groups, teams, games);
-
-        /*switch (menu()) {
+        //adicionar novo size
+        
+        switch (menu()) {
             case 1:
                 //alinea 2
                 fillArray(groups, teams, games, size);
@@ -82,7 +83,7 @@ public class TrabPraticoAPROG {
                 break;
             default:
                 System.out.println("Opção inválida");
-        } */
+        } 
         //aliena 3 e 4
         order(getteamScores(teams, games, teamScores, size), groups, size, teams, games);
     }
@@ -135,7 +136,6 @@ public class TrabPraticoAPROG {
     }
 
     //alinea 2
-    //ainda tenho de rever este
     public static void fillArray(char[] groups, String[] teams, int[][] games, int size) throws FileNotFoundException, IOException {
         //System.out.println("Introduza equipa");
         String teamName = sc.nextLine();
@@ -168,6 +168,7 @@ public class TrabPraticoAPROG {
     public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games) throws FileNotFoundException {
         //percorrer grupos e ordená-los
         orderGroups(groups, size, teamScores, teams, games);
+        //sameGroup(groups, size, teamScores, teams, games);
         System.out.println(Arrays.toString(teamScores));
         System.out.println(Arrays.toString(teams));
         System.out.println(Arrays.toString(groups));
@@ -182,6 +183,8 @@ public class TrabPraticoAPROG {
             }
         }
         System.out.println(Arrays.toString(groups));
+                sameGroup(groups, size, teamScores, teams, games);
+
     }
     
     public static void sameGroup(char []groups, int size, int[] teamScores, String[] teams, int[][] games){
@@ -394,7 +397,7 @@ public class TrabPraticoAPROG {
 
     //alinea 12
     public static void deleteTeams(String[] teams, char[] groups, int[][] games) {
-
+        
     }
 
     //alinea 13 - em desenvolvimento
@@ -404,3 +407,5 @@ public class TrabPraticoAPROG {
         printWriter.printf("%s,%d,%s,%d", groups, positions, teams, teamScores); //inserir num 'for looop' i=nº equipas na fase seguinte
     }
 }
+
+/* rever 4
