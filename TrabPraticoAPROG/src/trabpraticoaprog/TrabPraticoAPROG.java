@@ -33,7 +33,7 @@ public class TrabPraticoAPROG {
         //alinea 1  
         int size = readFile(groups, teams, games);
 
-        switch (menu()) {
+        /*switch (menu()) {
             case 1:
                 //alinea 2
                 fillArray(groups, teams, games, size);
@@ -82,9 +82,9 @@ public class TrabPraticoAPROG {
                 break;
             default:
                 System.out.println("Opção inválida");
-        }
+        } */
         //aliena 3 e 4
-        //order(getteamScores(teams, games, teamScores, size), groups, size, teams, games);
+        order(getteamScores(teams, games, teamScores, size), groups, size, teams, games);
     }
 
     public static int menu() {
@@ -167,44 +167,61 @@ public class TrabPraticoAPROG {
     //alinea 4
     public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games) throws FileNotFoundException {
         //percorrer grupos e ordená-los
-        char reference = groups[0], aux, group1, group2;
-        //esta parte ainda estou a tentar descobrir como fazer
-        for (int i = 1; i < size; i++) {
-            if (groups[i] < reference) {
-                aux = reference;
-                group1 = groups[i];
-                group2 = reference;
-            } else {
-                if (groups[i] == reference) {
-
+        orderGroups(groups, size, teamScores, teams, games);
+        System.out.println(Arrays.toString(teamScores));
+        System.out.println(Arrays.toString(teams));
+        System.out.println(Arrays.toString(groups));
+    }
+    //ordenar grupos
+    public static void orderGroups(char[] groups, int size, int[] teamScores, String[] teams, int[][] games) {
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = i + 1; j < size; j++) {
+                if (groups[j] < groups[i]) {
+                    exchangeInfo(groups,teamScores, teams, games, i, j);
                 }
             }
         }
+        System.out.println(Arrays.toString(groups));
+    }
+    
+    public static void sameGroup(char []groups, int size, int[] teamScores, String[] teams, int[][] games){
+        char currentGroup='A';
+        for(int i=0;i<size;i++){
+            if(groups[i]==currentGroup){
+        verifyCriteria(groups, size, teamScores, teams, games);
+        } else{
+                ++currentGroup;
+            }
+        }
+    }
+
+    public static void verifyCriteria(char [] groups, int size, int[] teamScores, String[] teams, int[][] games) {
         //ordenar dentro de cada grupo
-        for (int idx1 = 0; idx1 < size - 1; idx1++) {
+            for (int idx1 = 0; idx1 < size - 1; idx1++) {
             for (int idx2 = idx1 + 1; idx2 < size; idx2++) {
                 //verificar pontuação
                 if (teamScores[idx2] > teamScores[idx1]) {
-                    exchangeInfo(teamScores, teams, games, idx1, idx2);
+                    exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
                 } else {
                     //verificar maior nº golos marcados
                     if (teamScores[idx2] == teamScores[idx1]) {
-                        if (games[4][idx2] > games[4][idx1]) {
-                            exchangeInfo(teamScores, teams, games, idx1, idx2);
+                        if (games[idx2][4] > games[idx1][4]) {
+                            exchangeInfo(groups,teamScores, teams, games, idx1, idx2);
                         } else {
-                            if (games[4][idx2] == games[4][idx1]) {
-                                if (games[5][idx2] < games[5][idx1]) {
-                                    exchangeInfo(teamScores, teams, games, idx1, idx2);
+                            if (games[idx2][4] == games[idx1][4]) {
+                                //verificar menor nº de golos sofridos
+                                if (games[idx2][5] < games[idx1][5]) {
+                                    exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
                                 } else {
-                                    if (games[4][idx2] == games[4][idx1]) {
+                                    if (games[idx2][4] == games[idx1][4]) {
                                         //comparar 1 letra
                                         if (teams[idx2].charAt(0) < teams[idx2].charAt(0)) {
-                                            exchangeInfo(teamScores, teams, games, idx1, idx2);
+                                            exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
                                         } else {
                                             //caso de a 1 letra ser igual
                                             if (teams[idx2].charAt(0) == teams[idx1].charAt(0)) {
                                                 if (teams[idx2].charAt(1) > teams[idx1].charAt(1)) {
-                                                    exchangeInfo(teamScores, teams, games, idx1, idx2);
+                                                    exchangeInfo(groups,teamScores, teams, games, idx1, idx2);
                                                 }
                                             }
                                         }
@@ -216,10 +233,14 @@ public class TrabPraticoAPROG {
                 }
             }
         }
+    
     }
-
     //método para trocar as linhas completas
-    public static void exchangeInfo(int[] teamScores, String[] teams, int[][] games, int idx1, int idx2) {
+    public static void exchangeInfo(char [] groups, int[] teamScores, String[] teams, int[][] games, int idx1, int idx2) {
+        //trocar grupos
+        char auxGroups=groups[idx1];
+        groups[idx1]=groups[idx2];
+        groups [idx2]=auxGroups;
         //trocar pontuações
         int auxScore = teamScores[idx1];
         teamScores[idx1] = teamScores[idx2];
@@ -233,7 +254,6 @@ public class TrabPraticoAPROG {
         games[idx1] = games[idx2];
         games[idx2] = auxGames;
     }
-
     //alinea 5 - em desenvolvimento
     public static void listPosition() {
         printHeader();
@@ -280,7 +300,7 @@ public class TrabPraticoAPROG {
             System.out.println("Não há equipas com mais golos sofridos do que marcados.");
         } else {
             String[] sortedTeams = new String[numTeams];
-            for (int i = 0; i<numTeams; i++) {
+            for (int i = 0; i < numTeams; i++) {
                 sortedTeams[i] = teamsGoalsLost[i];
             }
             Arrays.sort(sortedTeams);
