@@ -160,19 +160,20 @@ public class TrabPraticoAPROG {
         boolean validTeam = true;
         do {
             for (int i = 0; i < size; i++) {
+                validTeam = true;
                 if (teams[i].equalsIgnoreCase(line[1].trim())) {
                     System.out.println("Equipa já existente. Insira novamente a informação.");
                     validTeam = false;
                     line = sc.nextLine().split(",");
+                    sc.nextLine();
                 }
             }
-            sc.nextLine();
         } while (validTeam == false);
-        
+
         groups[size] = line[0].trim().charAt(0);
         teams[size] = line[1].trim();
         for (int i = 0; i < games[0].length; i++) {
-            games[size][i] = Integer.parseInt(line[i + 2]);
+            games[size][i] = Integer.parseInt(line[i + 2].trim());
         }
         return (++size);
     }
