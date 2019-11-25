@@ -28,8 +28,7 @@ public class TrabPraticoAPROG {
         coluna 5 - nº de golos sofridos
          */
         int[] teamScores = new int[MAX_TEAMS];
-        String[] teamsGoalsLost = new String[MAX_TEAMS];
-        int numColumns = 6;
+
         //alinea 1  
         int size = readFile(groups, teams, games);
 
@@ -48,7 +47,7 @@ public class TrabPraticoAPROG {
             case 4:
                 //alinea4
                 getTeamScores(teams, games, teamScores, size);
-                order(teamScores, groups, size, teams, games, numColumns);
+                order(teamScores, groups, size, teams, games, NUM_COLUMNS);
                 break;
             case 5:
                 //alinea 5
@@ -56,7 +55,7 @@ public class TrabPraticoAPROG {
                 break;
             case 6:
                 //alinea 6
-                maxGoals(teams, games, size);
+                maxGoals(groups, teams, teamScores, games, size);
                 break;
             case 7:
                 //alinea 7
@@ -64,7 +63,7 @@ public class TrabPraticoAPROG {
                 break;
             case 8:
                 //alinea 8
-                moreGoalsLost(teams, games, size, teamsGoalsLost);
+                mostGoalsLost(groups, teams, teamScores, games, size);
                 break;
             case 9:
                 //alinea 9
@@ -125,9 +124,9 @@ public class TrabPraticoAPROG {
     }
 
     public static void printRow(char group, int position, String team, int teamScore, int[] games) {
-        System.out.printf("|%-5s|%5d|%-17s|%4d|%4d|%4d|%4d|%4d|%4d|%4d|%4d|%n", group, position, team, teamScore, games[0], games[1], games[2], games[3], games[4], games[5], games[4]-games[5]);
+        System.out.printf("|%-5s|%5d|%-17s|%4d|%4d|%4d|%4d|%4d|%4d|%4d|%4d|%n", group, position, team, teamScore, games[0], games[1], games[2], games[3], games[4], games[5], games[4] - games[5]);
     }
-    
+
     //retorna a classificação da equipa com índice <index>
     public static int getPosition(char[] groups, int index) {
         int position = 1;
@@ -137,8 +136,8 @@ public class TrabPraticoAPROG {
         }
         return position;
     }
-    
-//alinea 1 - completa
+
+    //alinea 1 - completa
     public static int readFile(char[] groups, String[] teams, int[][] games) throws FileNotFoundException {
         Scanner fileScan = new Scanner(new File("../PracticalWork.csv"));
         fileScan.nextLine(); //descarta linha do cabeçalho
@@ -196,7 +195,7 @@ public class TrabPraticoAPROG {
     //quase quase pronta!
     //1º não aparecia pontuações porque ao chamar o método desta alínea temos de chamar o 3 também para que sejam calculados os pontos
     //2º o problema está aqui*
-    public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games, int numColumns) throws FileNotFoundException {
+    public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games, int numColumns) {
         for (int idx1 = 0; idx1 < size - 1; idx1++) {
             for (int idx2 = 1; idx2 < size; idx2++) {
                 //pontuação
@@ -273,7 +272,7 @@ public class TrabPraticoAPROG {
         }
     }
 
-    //alinea 5 - em desenvolvimento
+    //alinea 5 - completa
     public static void listPositions(char[] groups, String[] teams, int[] teamScores, int[][] games, int size) {
         printHeader();
         for (int i = 0; i < size; i++) {
@@ -281,8 +280,8 @@ public class TrabPraticoAPROG {
         }
     }
 
-    //alinea 6
-    public static void maxGoals(String[] team, int[][] games, int size) throws FileNotFoundException {
+    //alinea 6 - completa
+    public static void maxGoals(char[] groups, String[] teams, int[] teamScores, int[][] games, int size) {
         int numberMaxGoals = games[0][4];
         //ciclo for para determinar qual é o maior nº de golos marcados por uma equipa
         for (int i = 1; i < size; i++) {
@@ -290,24 +289,27 @@ public class TrabPraticoAPROG {
                 numberMaxGoals = games[i][4];
             }
         }
-        System.out.println(numberMaxGoals);
         //percorrer array para listar equipas cujo nº de golos = nº max
+        printHeader();
         for (int j = 0; j < size; j++) {
             if (games[j][4] == numberMaxGoals) {
-                printHeader();
-                //falta compor printRows para que saia no formato pedido
+                printRow(groups[j], getPosition(groups, j), teams[j], teamScores[j], games[j]);
             }
         }
     }
 
-    //alinea 7
+    //alinea 7 - completa
     public static void listGoalsLost(char[] groups, String[] teams, int[] teamScores, int[][] games, int size) throws FileNotFoundException {
         System.out.println("Insira o nº de golos sofridos.");
         int numGoals = sc.nextInt();
         boolean numGoalsExists = false;
+        boolean isHeaderPrinted = false;
         for (int i = 0; i < size; i++) {
             if (games[i][5] == numGoals) {
-                printHeader();
+                while (isHeaderPrinted == false) {
+                    printHeader();
+                    isHeaderPrinted = true;
+                }
                 printRow(groups[i], getPosition(groups, i), teams[i], teamScores[i], games[i]);
                 numGoalsExists = true;
             }
@@ -315,49 +317,68 @@ public class TrabPraticoAPROG {
         if (numGoalsExists == false) {
             System.out.println("Nenhuma equipa sofreu " + numGoals + " golos.");
         }
-        //compor
-        printHeader();
     }
 
-    //alinea 8
-    //compor 8, definir métodos
-    public static void moreGoalsLost(String[] teams, int[][] games, int size, String[] teamsGoalsLost) throws FileNotFoundException {
-        int numTeams = moreScored(games, size, teams, teamsGoalsLost);
+    //alinea 8 - completa
+    public static void mostGoalsLost(char[] groups, String[] teams, int[] teamScores, int[][] games, int size) {
+        String[] teamsGoalsLost = new String[MAX_TEAMS];
+        int[] teamIndex = new int[size];
+        int numTeams = moreScored(games, size, teams, teamsGoalsLost, teamIndex);
         if (numTeams == 0) {
             System.out.println("Não há equipas com mais golos sofridos do que marcados.");
         } else {
-            String[] sortedTeams = new String[numTeams];
+            String[] sortedTeams = new String[numTeams]; //criação de novo array apenas com equipas com + golos sofridos que marcados
             for (int i = 0; i < numTeams; i++) {
                 sortedTeams[i] = teamsGoalsLost[i];
             }
-            Arrays.sort(sortedTeams);
+            sortAlphabetically(sortedTeams, teamIndex, numTeams);
+            printHeader();
             for (int i = 0; i < numTeams; i++) {
-                System.out.println(sortedTeams[i]);
+                int index = teamIndex[i];
+                printRow(groups[index], getPosition(groups, index), teams[index], teamScores[index], games[index]);
             }
         }
     }
 
     //metodo para  verificar quais as equipas com mais golos sofridos
-    public static int moreScored(int[][] games, int size, String[] teams, String[] teamsGoalsLost) {
+    public static int moreScored(int[][] games, int size, String[] teams, String[] teamsGoalsLost, int[] teamIndex) {
         int numTeamsGoalsLost = 0;
         for (int i = 0; i < size; i++) {
             //verificar se equipa tem + golos sofridos e preencher array de equipas com + golos sofridos
             if (games[i][5] > games[i][4]) {
                 teamsGoalsLost[numTeamsGoalsLost] = teams[i];
+                teamIndex[numTeamsGoalsLost] = i;
                 numTeamsGoalsLost++;
             }
         }
         return numTeamsGoalsLost; //devolve o nº de equipas com mais golos sofridos que marcados
     }
 
-    //alinea 9 - em desenvolvimento
-    public static void firstPositions(char[] groups, String[] teams, int[][] games, int size, int[] teamScores) {
-        char currentGroup = 'A';
-        for (int i = 0; i < size; i++) {
-            if (groups[i] == currentGroup) {
-                printHeader();
+    //metodo para ordenar alfabeticamente as equipas
+    public static void sortAlphabetically(String[] sortedTeams, int[] teamIndex, int numTeams) {
+        for (int idx1 = 0; idx1 < numTeams - 1; idx1++) {
+            for (int idx2 = 1; idx2 < numTeams; idx2++) {
+                if (sortedTeams[idx2].compareTo(sortedTeams[idx1]) < 0) {
+                    //Troca a equipa
+                    String auxTeams = sortedTeams[idx1];
+                    sortedTeams[idx1] = sortedTeams[idx2];
+                    sortedTeams[idx2] = auxTeams;
+                    //Troca o índice
+                    int auxIndex = teamIndex[idx1];
+                    teamIndex[idx1] = teamIndex[idx2];
+                    teamIndex[idx2] = auxIndex;
+                }
             }
-            ++currentGroup;
+        }
+    }
+
+    //alinea 9
+    public static void firstPositions(char[] groups, String[] teams, int[][] games, int size, int[] teamScores) {
+        printHeader();
+        for (int i = 0; i < size; i++) {
+            if (getPosition(groups, i) == 1) {
+                printRow(groups[i], getPosition(groups, i), teams[i], teamScores[i], games[i]);
+            }
         }
     }
 
@@ -375,7 +396,7 @@ public class TrabPraticoAPROG {
 
     }
 
-    //alinea 11
+    //alinea 11 - completa
     public static void generateStatistics(int[][] games, int size) throws FileNotFoundException {
         int gameSum = 0, winSum = 0, tieSum = 0, lossSum = 0, goalsScoredSum = 0, goalsLostSum = 0;
         for (int i = 0; i < size; i++) {
