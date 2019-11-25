@@ -323,7 +323,7 @@ public class TrabPraticoAPROG {
     public static void mostGoalsLost(char[] groups, String[] teams, int[] teamScores, int[][] games, int size) {
         String[] teamsGoalsLost = new String[MAX_TEAMS];
         int[] teamIndex = new int[size];
-        int numTeams = moreScored(games, size, teams, teamsGoalsLost, teamIndex);
+        int numTeams = mostScored(games, size, teams, teamsGoalsLost, teamIndex);
         if (numTeams == 0) {
             System.out.println("Não há equipas com mais golos sofridos do que marcados.");
         } else {
@@ -341,7 +341,7 @@ public class TrabPraticoAPROG {
     }
 
     //metodo para  verificar quais as equipas com mais golos sofridos
-    public static int moreScored(int[][] games, int size, String[] teams, String[] teamsGoalsLost, int[] teamIndex) {
+    public static int mostScored(int[][] games, int size, String[] teams, String[] teamsGoalsLost, int[] teamIndex) {
         int numTeamsGoalsLost = 0;
         for (int i = 0; i < size; i++) {
             //verificar se equipa tem + golos sofridos e preencher array de equipas com + golos sofridos
@@ -372,7 +372,7 @@ public class TrabPraticoAPROG {
         }
     }
 
-    //alinea 9
+    //alinea 9 - completa
     public static void firstPositions(char[] groups, String[] teams, int[][] games, int size, int[] teamScores) {
         printHeader();
         for (int i = 0; i < size; i++) {
@@ -382,17 +382,10 @@ public class TrabPraticoAPROG {
         }
     }
 
-    public static void listFirstOne(char[] groups, String[] teams, int[][] games, int[] teamScores) {
-
-    }
-
     //alinea 10
     public static void listInfo(String[] teams, int[][] games, char[] groups, int size) {
         System.out.println("Qual a equipa que quer listar?");
-
-        for (int i = 0; i < size; i++) {
-
-        }
+        String userDefinedTeam = sc.nextLine().trim();
 
     }
 
