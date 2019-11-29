@@ -1,0 +1,8 @@
+A,1,Uruguai - B,2,Portugal
+A,2,Rússia - B,1,Espanha
+C,1,França - D,2,Argentina
+C,2,Dinamarca - D,1,Croácia
+E,1,Brasil - F,2,México
+E,2,Suíça - F,1,Suécia
+H,1,Senegal -  ,2,
+H,2,Japão -  ,1,

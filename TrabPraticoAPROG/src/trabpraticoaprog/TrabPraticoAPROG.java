@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class TrabPraticoAPROG {
 
-    static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in,"ISO-8859-1");
 
     static final int MAX_TEAMS = 50;
     static final int NUM_COLUMNS = 6;
@@ -31,6 +31,8 @@ public class TrabPraticoAPROG {
 
         //alinea 1  
         int size = readFile(groups, teams, games);
+        getTeamScores(teams, games, teamScores, size);
+        order(teamScores, groups, size, teams, games);
 
         switch (menu()) {
             case 1:
@@ -47,7 +49,7 @@ public class TrabPraticoAPROG {
             case 4:
                 //alinea4
                 getTeamScores(teams, games, teamScores, size);
-                order(teamScores, groups, size, teams, games, NUM_COLUMNS);
+                order(teamScores, groups, size, teams, games);
                 break;
             case 5:
                 //alinea 5
@@ -71,7 +73,7 @@ public class TrabPraticoAPROG {
                 break;
             case 10:
                 //alinea10
-                listInfo(teams, games, groups, size);
+                listInfo(teams, games, groups, teamScores, size);
                 break;
             case 11:
                 //alinea 11
@@ -79,15 +81,17 @@ public class TrabPraticoAPROG {
                 break;
             case 12:
                 //alinea 12
-                deleteTeams(teams, groups, games);
+                size = deleteTeams(teams, groups, games, teamScores, size);
                 break;
             case 13:
                 //alinea 13
-                System.out.println("Nao implementado");
+                size = deleteTeams(teams, groups, games, teamScores, size);
+                generateFinalStage(groups, teams, teamScores, size);
                 break;
             case 14:
                 //alinea 14
-                System.out.println("Nao implementado");
+                size = deleteTeams(teams, groups, games, teamScores, size);
+                generateFinalGames(groups, teams, size);
                 break;
             case 15:
                 break;
@@ -191,62 +195,51 @@ public class TrabPraticoAPROG {
         }
     }
 
-    //alinea 4
-    //quase quase pronta!
-    //1º não aparecia pontuações porque ao chamar o método desta alínea temos de chamar o 3 também para que sejam calculados os pontos
-    //2º o problema está aqui*
-    public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games, int numColumns) {
-        for (int idx1 = 0; idx1 < size - 1; idx1++) {
-            for (int idx2 = 1; idx2 < size; idx2++) {
-                //pontuação
-                //* AQUI!! Se experimentares mudar o sinal da igualdade imprime exatamente a mesma coisa! É como se o sinal não estivesse a funcionar
+    //alinea 4 - completa mas não funciona para grupos com menos que 4 equipas...
+    public static void order(int[] teamScores, char[] groups, int size, String[] teams, int[][] games) {
+        int idx1 = 0, idx2 = idx1 + 1, groupSize = idx1 + 4; //groupSize - limite até ao qual o grupo não muda (cada grupo tem 4 equipas)
 
-                if (teamScores[idx2] > teamScores[idx1]) {
-                    exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
-                } else {
-                    //verificar maior nº golos marcados
+        //ordenar por grupos
+        orderGroups(groups, size, teamScores, teams, games);
 
-                    if (teamScores[idx2] == teamScores[idx1]) {
-                        if (games[idx2][4] > games[idx1][4]) {
-                            exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
-                        } else {
-                            if (games[idx2][4] == games[idx1][4]) {
-                                //verificar menor nº de golos sofridos
-                                if (games[idx2][5] < games[idx1][5]) {
-                                    exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
-                                } else {
-                                    if (games[idx2][4] == games[idx1][4]) {
-                                        //comparar 1 letra
-                                        if (teams[idx2].compareTo(teams[idx1]) < 0) {
-                                            exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
-                                        }
-                                    }
-
-                                }
-                            }
-                        }
+        //ordena em cadeia enquanto estiver dentro do mesmo grupo
+        while (groupSize <= size && groups[idx1] == groups[idx2]) {
+            for (idx1 = idx1; idx1 < groupSize - 1; idx1++) {
+                for (idx2 = idx1 + 1; idx2 < groupSize; idx2++) {
+                    //ordena as pontuações
+                    if (teamScores[idx2] > teamScores[idx1]) {
+                        exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
+                    }
+                    //ordena conforme mais golos marcados
+                    if (teamScores[idx2] == teamScores[idx1] && games[idx2][4] > games[idx1][4]) {
+                        exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
+                    }
+                    //ordena conforme menos golos sofridos
+                    if (teamScores[idx2] == teamScores[idx1] && games[idx2][4] == games[idx1][4] && games[idx2][5] < games[idx1][5]) {
+                        exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
+                    }
+                    //ordena alfabeticamente
+                    if (teamScores[idx2] == teamScores[idx1] && games[idx2][4] == games[idx1][4] && games[idx2][5] == games[idx1][5] && teams[idx2].compareTo(teams[idx1]) < 0) {
+                        exchangeInfo(groups, teamScores, teams, games, idx1, idx2);
                     }
                 }
             }
+
+            groupSize += 4; //aumenta o limite de 4 em 4 para iniciar um novo grupo
+            idx1++; //"salta" uma posição para mudar de grupo
         }
-        orderGroups(groups, size, teamScores, teams, games);
-        System.out.println(Arrays.toString(groups));
-        System.out.println(Arrays.toString(teamScores));
-        System.out.println(Arrays.toString(teams));
     }
 
     public static void exchangeInfo(char[] groups, int[] teamScores, String[] teams, int[][] games, int idx1, int idx2) {
-        int aux, aux1;
-        int[] aux2;
-        String aux3;
+        int[] auxGames = new int[games[0].length];
         //trocar pontos
         int auxScore = teamScores[idx1];
         teamScores[idx1] = teamScores[idx2];
         teamScores[idx2] = auxScore;
         //trocar inteiros
-        aux2 = games[idx1];
+        auxGames = games[idx1];
         games[idx1] = games[idx2];
-        games[idx2] = aux2;
+        games[idx2] = auxGames;
 
         //trocar grupos
         char auxGroups = groups[idx1];
@@ -258,9 +251,6 @@ public class TrabPraticoAPROG {
         teams[idx2] = auxTeams;
     }
 
-    //ordenar grupos
-    //isto está a fazer bem
-    //é melhor só ser feita a ordenação neste ponto, assim as pontuações já estão em ordem decrescente é só agrupar
     public static void orderGroups(char[] groups, int size, int[] teamScores, String[] teams, int[][] games) {
 
         for (int i = 0; i < size - 1; i++) {
@@ -382,11 +372,21 @@ public class TrabPraticoAPROG {
         }
     }
 
-    //alinea 10
-    public static void listInfo(String[] teams, int[][] games, char[] groups, int size) {
+    //alinea 10 - completa (falta verificar acentos)
+    public static void listInfo(String[] teams, int[][] games, char[] groups, int[] teamScores, int size) {
         System.out.println("Qual a equipa que quer listar?");
+        sc.nextLine();
         String userDefinedTeam = sc.nextLine().trim();
-
+        int index = 0;
+        while (index < size && !teams[index].equalsIgnoreCase(userDefinedTeam)) {
+            index++;
+        }
+        if (index == size) {
+            System.out.println("Não foi possível encontrar a equipa introduzida.");
+        } else {
+            printHeader();
+            printRow(groups[index], getPosition(groups, index), teams[index], teamScores[index], games[index]);
+        }
     }
 
     //alinea 11 - completa
@@ -413,15 +413,54 @@ public class TrabPraticoAPROG {
         printWriter.close();
     }
 
-    //alinea 12
-    public static void deleteTeams(String[] teams, char[] groups, int[][] games) {
-
+    //alinea 12 - completa
+    public static int deleteTeams(String[] teams, char[] groups, int[][] games, int[] teamScores, int size) {
+        System.out.println(Arrays.toString(groups));
+        for (int i = 2; i < size; i++) {
+            if (getPosition(groups, i) == 3) { //procura o 3º classificado
+                size = delete(groups, teams, games, teamScores, size, i); //apaga o 3º e 4º classificados
+                i++; //salta para o 3º classificado do próximo grupo
+            }
+        }
+        System.out.println(Arrays.toString(groups));
+        return size;
     }
 
-    //alinea 13 - em desenvolvimento
-    public static void generateFinalStage(char[] groups, int[] positions, String[] teams, int[] teamScores) throws FileNotFoundException {
+    public static int delete(char[] groups, String[] teams, int[][] games, int[] teamScores, int size, int index) {
+        for (int i = index; i < size; i++) {
+            groups[i] = groups[i + 2];
+            teams[i] = teams[i + 2];
+            games[i] = games[i + 2];
+            teamScores[i] = teamScores[i + 2];
+        }
+        groups[size - 1] = groups[size - 2] = ' ';
+        teams[size - 1] = teams[size - 2] = "";
+        for (int j = 0; j < games[0].length; j++) {
+            games[size - 1][j] = games[size - 2][j] = 0;
+        }
+        teamScores[size - 1] = teamScores[size - 2] = 0;
+        size -= 2;
+        return size;
+    }
+
+    //alinea 13 - completa
+    public static void generateFinalStage(char[] groups, String[] teams, int[] teamScores, int size) throws FileNotFoundException {
         File finalStageFile = new File("../FinalStage.csv");
         PrintWriter printWriter = new PrintWriter(finalStageFile);
-        printWriter.printf("%s,%d,%s,%d", groups, positions, teams, teamScores); //inserir num 'for looop' i=nº equipas na fase seguinte
+        for (int i = 0; i < size; i++) {
+            printWriter.printf("%s, %d, %s, %d%n", groups[i], getPosition(groups, i), teams[i], teamScores[i]);
+        }
+        printWriter.close();
+    }
+
+    //alinea 14 - o que fazer nos grupos com 2?
+    public static void generateFinalGames(char[] groups, String[] teams, int size) throws FileNotFoundException {
+        File finalGamesFile = new File("../FinalStageGames.txt");
+        PrintWriter printWriter = new PrintWriter(finalGamesFile);
+        for (int i = 0; i < size; i += 4) {
+            printWriter.printf("%s,%d,%s - %s,%d,%s%n", groups[i], getPosition(groups, i), teams[i], groups[i + 3], getPosition(groups, i + 3), teams[i + 3]);
+            printWriter.printf("%s,%d,%s - %s,%d,%s%n", groups[i + 1], getPosition(groups, i + 1), teams[i + 1], groups[i + 2], getPosition(groups, i + 2), teams[i + 2]);
+        }
+        printWriter.close();
     }
 }
