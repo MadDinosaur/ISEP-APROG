@@ -4,7 +4,7 @@
 
 Course completion: ![](https://progress-bar.dev/16)
 
-## Course Program:
+## Program:
 ### 1. Programming Fundamentals (30%)
 
     1.1 Computational Resolution of Problems
@@ -52,12 +52,3 @@ Course completion: ![](https://progress-bar.dev/16)
 ### 6. Text Files Manipulation (5%)
 
 ### 7. Application Development (15%)
-
-
-## Final Project
-
-- Single file Java application using procedural programming.
-
-- Management application for a football tournament.
-
-![](preview.png)
