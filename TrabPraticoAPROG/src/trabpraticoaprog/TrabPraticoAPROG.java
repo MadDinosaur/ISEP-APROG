@@ -143,7 +143,7 @@ public class TrabPraticoAPROG {
 
     //alinea 1 - completa
     public static int readFile(char[] groups, String[] teams, int[][] games) throws FileNotFoundException {
-        Scanner fileScan = new Scanner(new File("../PracticalWork.csv"));
+        Scanner fileScan = new Scanner(new File("PracticalWork.csv"));
         fileScan.nextLine(); //descarta linha do cabeçalho
         int numLines = 0; //conta as linhas do documento
         while (fileScan.hasNextLine()) {
